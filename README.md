@@ -44,6 +44,8 @@ Say the application's own path is as follows: `https://thread-paper.glitch.me`:
 
 The UI behind the application can be found in the `Front-End` folder. The front-end development was the subject of a previous effort, and it is documented [right here](https://github.com/borntofrappe/Practice-Front-End-Web-Development/tree/master/Front-End%20URL%20Shortener).
 
+A simple JavaScript file is included to benefit from the express package, to render on the server the developed UI.
+
 ## Development
 
 Admittedly, the project baffled me at first, but after a couple of days, and bit of experimentation with the [working applicatin](https://thread-paper.glitch.me/) provided in the [assignment](https://learn.freecodecamp.org/apis-and-microservices/apis-and-microservices-projects/url-shortener-microservice/), I was able to figure out how the functionality is achieved.
