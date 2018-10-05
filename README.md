@@ -59,3 +59,51 @@ Here's a few things I was able to discern:
 _Obvious conclusion_: the application saves every URL as specified in the POST request. It stores its value alongside an integer value used as ID. It increments the integer for every unique URL. Clever, and less complex than anticipated.
 
 The challenge becomes then how to store the URL as requested through the POST request, which is where **MongoDB** and **Mongoose**, alongside **mLab** come into play.
+
+## mLab
+
+[mLab](https://mlab.com) is used to host the database storing the URLs behind the application. Here's a few pointers to get up and running with the service:
+
+- choose to first _create a new database_, picking the most conventient options for the location and features;
+
+- once the database is set up, direct yourself toward the _user_ tab and opt to _add a database user_.
+
+  Detail here a _username_ and a _password_, which need to be remembered to later connect the application. Be wise not to tick the _read-only_ checkbox, as you'll want to update the database as needed.
+
+  A JSON object will be automatically generated for each user, with a few details on the role and database.
+
+- in order to connect the database with the application, detail then the _URI code_.
+
+  This code is made up of a string provided by mLab itself, which looks something similar to the following:
+
+  ```code
+  mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/fcc-url-shortener
+  ```
+
+  And needs to be populated with the values for the user and password. Just remember not to substitute the entirety of the `<dbuser>` and `<dbpassword>` values, tags included.
+
+- on [glitch](https://glitch.com), include the URI as a variable in the secret `env` file.
+
+  Remember the following rules for `env` variables:
+
+  - no spaces;
+
+  - no quotes;
+
+  - uppercase;
+
+  - underscore separated.
+
+  Rules making up the variable as follows:
+
+  ```code
+  MONGO_URI=mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/fcc-url-shortener
+  ```
+
+- in the JavaScript file, retrieve the URI from any file as follows:
+
+  ```JS
+  const URI = process.env.MONGO_URI;
+  ```
+
+  Mongoose will come into play to later _connect_ the application to the prescribed database.
