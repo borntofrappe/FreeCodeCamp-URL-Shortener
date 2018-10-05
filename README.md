@@ -60,7 +60,7 @@ _Obvious conclusion_: the application saves every URL as specified in the POST r
 
 The challenge becomes then how to store the URL as requested through the POST request, which is where **MongoDB** and **Mongoose**, alongside **mLab** come into play.
 
-## mLab
+### mLab
 
 [mLab](https://mlab.com) is used to host the database storing the URLs behind the application. Here's a few pointers to get up and running with the service:
 
@@ -107,3 +107,88 @@ The challenge becomes then how to store the URL as requested through the POST re
   ```
 
   Mongoose will come into play to later _connect_ the application to the prescribed database.
+
+### Mongoose
+
+Mongoose is a dependency which allows to easily communicate with a database, and implement CRUD operations. As in **C**reate, **R**ead, **U**pdate, **D**elete.
+
+Just remember to first install the necessary libraries:
+
+```code
+npm install mongoose mongodb --save
+```
+
+And have them listed in the local `package.json` file.
+
+Once the libraries are installed, require each package storing a reference in a variable.
+
+```JS
+const mongodb = require('mongodb');
+const mongoose = require('mongoose');
+```
+
+And link the application to the database through the `connect` method. This method accepts as argument the URI earlier introduced.
+
+```JS
+mongoose.connect(process.env.MONGO_URI);
+```
+
+#### Mongoose Jargon
+
+Mongoose interacts with the database through a few key elements:
+
+- a schema, defining the properties and values accepted by a model;
+
+- a model, describing the structure of a document.
+
+A document is ultimately an instance in the database, a series of property value pairs detailing the particular object.
+
+A practical instance, for the project at hand, might help clear past this jargon-y structure.
+
+- create a schema:
+
+  ```JS
+  const Schema = mongoose.Schema;
+  ```
+
+- create an instance of the schema object, for the specific use case of the application:
+
+  ```JS
+  const urlSchema = new Schema();
+  ```
+
+  In the instance detail the structure which will be inherited by all documents, passing an object and detailing property value pairs. Detail here fields and the type of the variables the fields accept, as in:
+
+  ```JS
+  const urlSchema = new Schema({
+    url: String,
+    id: Number
+  });
+  ```
+
+  Additional options can be detailed include an object instead of a single value. To specify for instance a default value, or whether the field is required or again unique.
+
+  ```JS
+  const urlSchema = new Schema({
+    url: {
+      type: String,
+      required: true
+    }
+  });
+  ```
+
+- create a model, out of the schema
+
+  This is a constructor from which all documents will be created. The `model()` function, available through the mongoose library, allows to create such a constructor after the defined instance of the schame, detailing a string for the name of the model and the schema itself.
+
+  ```JS
+  const Url = mongoose.model('Url', urlSchema);
+  ```
+
+Based on this model, it is possible to detail CRUD operations. For the project at hand, these relate to:
+
+1. create a document for each unique URL;
+
+1. read a document on the basis of a unique, incremented integer value.
+
+More research in the [mongoose docs](https://mongoosejs.com/) is however warranted.
