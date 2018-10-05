@@ -2,7 +2,9 @@
 
 > Third of five projects required to earn the **API and Microservices** certification @freeCodeCamp.
 
-<!-- Link to the working glitch right here -->
+Link to the pen making up the UI of the application [right here](https://codepen.io/borntofrappe/full/JmGGob/)
+
+<!-- Link to the working glitch [right here]() -->
 
 ## Preface
 
@@ -40,4 +42,4 @@ Say the application's own path is as follows: `https://thread-paper.glitch.me`:
 
 ## Design
 
-The UI behind the application can be found in the `Front-End` folder. The front-end development was the subject of a previous effort, and it is documented right [here](https://github.com/borntofrappe/Practice-Front-End-Web-Development/tree/master/Front-End%20URL%20Shortener).
+The UI behind the application can be found in the `Front-End` folder. The front-end development was the subject of a previous effort, and it is documented [right here](https://github.com/borntofrappe/Practice-Front-End-Web-Development/tree/master/Front-End%20URL%20Shortener).
