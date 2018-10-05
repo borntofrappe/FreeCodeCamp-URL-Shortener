@@ -18,11 +18,11 @@ An instance might help clear any doubt on the purpose of the application:
 
 Say the application's own path is as follows: `https://thread-paper.glitch.me`:
 
-- as the user posts the URL, he/she is offered the mentioned JSON object in the following path: 
+- as the user posts the URL, he/she is offered the mentioned JSON object in the following path:
 
   ```text
   https://thread-paper.glitch.me/api/shorturl/new
-  ````
+  ```
 
 - the JSON object details the anticipated information. For `https://www.freecodecamp.com` for instance, it offers the following response:
 
@@ -35,5 +35,9 @@ Say the application's own path is as follows: `https://thread-paper.glitch.me`:
   ```text
   https://thread-paper.glitch.me/api/shorturl/2
   ```
-  
+
   In the instance forwarding the user exactly to `https://www.freecodecamp.com`.
+
+## Design
+
+The UI behind the application can be found in the `Front-End` folder. The front-end development was the subject of a previous effort, and it is documented right [here](https://github.com/borntofrappe/Practice-Front-End-Web-Development/tree/master/Front-End%20URL%20Shortener).
