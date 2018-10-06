@@ -283,12 +283,12 @@ Url.findOne({
 })
 ```
 
-The C and R operation allow to save and read documents as relates the database. It is however to customize their implmentation as to include the exact values required by the application. The value of the form and the value of the query string for instance.
+A _rather important note_: `findOne()` returns either one document or `null`, in case no object matches the detailed argument.
 
-- the create operation occurs when a URL is posted in the form, and the visitor is forwarded to the `[project_url]/api/shorturl/new` path. Here a read operation might be triggered as to highlight the JSON file connected to the database values.
+The C and R operation allow to save and read documents as relates the database. It is however necessary to customize the implmentation of the functions as to include the exact values required by the application. The value of the form and the value of the query string for instance.
 
-- the read operation is enacted once more in `[project_url]/api/shorturl/<value>`. Here the application needs to find the specific document with the `short_url` value and forward the visitor toward the `url` value of the same document.
+- when reaching the `[project_url]/api/shorturl/new` path through a POST request, the value of the input element is used to create and save a document. If one document with the same `url` doesn't exist that is.
+
+- when reaching the `[project_url]/api/shorturl/<value>` path, the request parameter is used to read in the database for an instance matching the value.
 
 With regards to this last feat, the [application by freecodecamp](https://thread-paper.glitch.me/) provides a suggestion in the **dns** core module. Additional notes on [this module](https://nodejs.org/api/dns.html) will follow, once the application is equipped to create and read documents on the basis of actual input.
-
-<!-- TODO: add notes behind the actual implementation of the create and read operations -->
