@@ -64,13 +64,13 @@ The challenge becomes then how to store the URL as requested through the POST re
 
 ### mLab
 
-[mLab](https://mlab.com) is used to host the database storing the URLs behind the application. Here's a few pointers to get up and running with the service:
+[mLab](https://mlab.com) is used to host the database storing the URLs for the application. Here's a few pointers to get up and running with the service:
 
-- choose to first _create a new database_, picking the most conventient options for the location and features;
+- choose to first _create a new database_, picking the most conventient options for the location and features.
 
 - once the database is set up, direct yourself toward the _user_ tab and opt to _add a database user_.
 
-  Detail here a _username_ and a _password_, which need to be remembered to later connect the application. Be wise not to tick the _read-only_ checkbox, as you'll want to update the database as needed.
+  Detail here a _username_ and a _password_, which need to be remembered as to later link the application and the specific database. Be wise not to tick the _read-only_ checkbox, as you'll want to update the database as needed.
 
   A JSON object will be automatically generated for each user, with a few details on the role and database.
 
@@ -82,7 +82,7 @@ The challenge becomes then how to store the URL as requested through the POST re
   mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/fcc-url-shortener
   ```
 
-  And needs to be populated with the values for the user and password. Just remember not to substitute the entirety of the `<dbuser>` and `<dbpassword>` values, tags included.
+  This string needs to be populated with the values for the user and password, in the respective fields. Just remember to substitute the entirety of the `<dbuser>` and `<dbpassword>` values, tags included.
 
 - on [glitch](https://glitch.com), include the URI as a variable in the secret `env` file.
 
@@ -110,9 +110,29 @@ The challenge becomes then how to store the URL as requested through the POST re
 
   Mongoose will come into play to later _connect_ the application to the prescribed database.
 
+  _A small note on local development_: the same process variable can be included from a `.env` file stored locally. In the root of the project folder, save a file with the same syntax used in the Glitch project. Install then the `dotenv` dependency, through node, and require its dependency at the top of the JavaScript file.
+
+  ```code
+  npm install dotenv --save
+  ```
+
+  ```JS
+  // require the dotenv library
+  require('dotenv').config();
+  ```
+
+  Any `.env` variable will be then accessible as previously detailed:
+
+  ```JS
+  // consider the MONGO_URI variable as stored in a `.env` file
+  const MONGO_URI = process.env.MONGO_URI;
+  ```
+
 ### Mongoose
 
 Mongoose is a dependency which allows to easily communicate with a database, and implement CRUD operations. As in **C**reate, **R**ead, **U**pdate, **D**elete.
+
+#### Setup
 
 Just remember to first install the necessary libraries:
 
@@ -135,7 +155,9 @@ And link the application to the database through the `connect` method. This meth
 mongoose.connect(process.env.MONGO_URI);
 ```
 
-#### Mongoose Jargon
+This effectively links the application to the database, and allows to then enact the mentioned four operations.
+
+#### Schemas, Models and Documents
 
 Mongoose interacts with the database through a few key elements:
 
@@ -164,7 +186,7 @@ A practical instance, for the project at hand, might help clear past this jargon
   ```JS
   const urlSchema = new Schema({
     url: String,
-    id: Number
+    short_url: Number
   });
   ```
 
@@ -175,13 +197,18 @@ A practical instance, for the project at hand, might help clear past this jargon
     url: {
       type: String,
       required: true
+    },
+    short_url: {
+      type: Number,
+      required: true,
+      unique: true
     }
   });
   ```
 
 - create a model, out of the schema
 
-  This is a constructor from which all documents will be created. The `model()` function, available through the mongoose library, allows to create such a constructor after the defined instance of the schame, detailing a string for the name of the model and the schema itself.
+  This is a constructor from which all documents will be created (and on which all documents will be based). The `model()` function, available through the mongoose library, allows to create such a constructor after the defined instance of the schema, detailing a string for the name of the model and the schema itself.
 
   ```JS
   const Url = mongoose.model('Url', urlSchema);
