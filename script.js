@@ -2,6 +2,8 @@
 const port = 3000;
 const express = require('express');
 const app = express();
+// require the dotenv library to access local `.env` variables
+require('dotenv').config();
 
 // render the stylesheet as found in the public folder
 app.use(express.static(`${__dirname}/public`));
@@ -22,3 +24,6 @@ app.get('/api/shorturl', function (req, res) {
 // listen in the selected port and render the simple application
 app.listen(port);
 console.log(`listening on port ${port}`);
+
+// test retrieving the value of the process variable through the dotenv dependency
+// console.log(process.env.MONGO_URI);
