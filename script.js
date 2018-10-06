@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 // mount the body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// MONGODB && MONGOOSE
 // require mongodb and mongoose
 const mongodb = require('mongodb');
 const mongoose = require('mongoose');
@@ -27,10 +28,10 @@ const urlSchema = new Schema({
   }
 });
 
-urlSchema.index({ url: 1 }, { unique: true });
 // define a model, giving structure to all instances (documents)
 const Url = mongoose.model('Url', urlSchema);
 
+// EXPRESS && ROUTING
 // render the stylesheet as found in the public folder
 app.use(express.static(`${__dirname}/public`));
 
