@@ -49,10 +49,17 @@
       </ul>
     </div>
 
-    <!-- include the form element eventually enabling the microservice (through node) -->
-    <form action="api/shorturl/">
-      <input required type="text" value="https://freecodecamp.org">
-      <button>Shorten URL</button>
+    <!-- include the form element eventually enabling the microservice
+      remember the following attributes:
+      - action for the form, detailing the path
+      - method for the form, detailing the header's method
+      - name for the input, allowing to access the value attribute through the body parser dependency
+      - type for the button, to trigger the post request
+
+    -->
+    <form action="/api/shorturl" method="post">
+      <input required type="text" name="url" value="https://freecodecamp.org">
+      <button type="submit">Shorten URL</button>
     </form>
 
     <div class="query">

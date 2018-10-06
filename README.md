@@ -62,6 +62,20 @@ _Obvious conclusion_: the application saves every URL as specified in the POST r
 
 The challenge becomes then how to store the URL as requested through the POST request, which is where **MongoDB** and **Mongoose**, alongside **mLab** come into play.
 
+### HTML
+
+In order to actually retrieve the values detailed in the form element, it is first necessary to update the structure of the form element.
+
+- wrap the input and button elements in a form;
+
+- include a `type` of `submit` for the button, triggering the method and the path detailed in the form;
+
+- add a `method` and `action` attribute for the form element. The first describes the method of the request (get, post), the second the path toward which the form will forward the viewer.
+
+- specify a `name` attribute in the input element. This will allow to later retrieve its value through the body parser dependency.
+
+  As in: `req.body.name`.
+
 ### mLab
 
 [mLab](https://mlab.com) is used to host the database storing the URLs for the application. Here's a few pointers to get up and running with the service:
