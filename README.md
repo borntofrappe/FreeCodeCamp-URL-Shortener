@@ -200,8 +200,7 @@ A practical instance, for the project at hand, might help clear past this jargon
     },
     short_url: {
       type: Number,
-      required: true,
-      unique: true
+      required: true
     }
   });
   ```
@@ -221,3 +220,61 @@ Based on this model, it is possible to detail CRUD operations. For the project a
 1. read a document on the basis of a unique, incremented integer value.
 
 More research in the [mongoose docs](https://mongoosejs.com/) is however warranted.
+
+#### Create
+
+A document is created and saved in the database as follows:
+
+1. create the instance of the document, on the basis of the defined model.
+
+   ```JS
+   const url = new Url();
+   ```
+
+   In between parens specify the fields and values as prescribed by the model's own structure.
+
+   ```JS
+   const url = new Url({
+     url: 'https://mlab.com',
+     short_url: 1
+   });
+   ```
+
+1. save the document through the `save()` method. This is applied on the document itself and, following the node convention, includes a callback function run whenever the saving functionality is completed.
+
+   ```JS
+   url.save((err, data) => {
+   if (err) throw err;
+     console.log(data);
+   });
+   ```
+
+   In this instance, `data` relates to an object detailing the document itself. If the function is successfull, that is.
+
+Ultimately, creating and saving a document is something that needs to happen when a URL is posted in the form element. That being said, the C in the CRUD set of operations needs to go through _only if_ a document with the same values is not already stored.
+
+#### Read
+
+As mentioned, reading the database might be useful to generate new documents only when necessary. That being said, the primary use case for the R in the CRUD set of operations concerns the `shorurl` path. Indeed, reading the database is essential when the shortened url is included in the prescribed path and the page needs to forward the user toward the specified, unshortened page.
+
+It is possible to find a document with a few methods, among which `findOne()`. Applied on the model (first letter conventionally uppercase), it accepts as argument an object detailing the property value pairs of the target document. A callback function can also be included, following the aforementioned node convention.
+
+```JS
+Url.findOne({
+  short_url: 1
+}, (err, data) => {
+  if (err) throw err;
+
+  console.log(data);
+})
+```
+
+The C and R operation allow to save and read documents as relates the database. It is however to customize their implmentation as to include the exact values required by the application. The value of the form and the value of the query string for instance.
+
+- the create operation occurs when a URL is posted in the form, and the visitor is forwarded to the `[project_url]/api/shorturl/new` path. Here a read operation might be triggered as to highlight the JSON file connected to the database values.
+
+- the read operation is enacted once more in `[project_url]/api/shorturl/<value>`. Here the application needs to find the specific document with the `short_url` value and forward the visitor toward the `url` value of the same document.
+
+With regards to this last feat, the [application by freecodecamp](https://thread-paper.glitch.me/) provides a suggestion in the **dns** core module. Additional notes on [this module](https://nodejs.org/api/dns.html) will follow, once the application is equipped to create and read documents on the basis of actual input.
+
+<!-- TODO: add notes behind the actual implementation of the create and read operations -->
