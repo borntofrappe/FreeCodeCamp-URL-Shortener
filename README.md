@@ -4,7 +4,7 @@
 
 Link to the pen making up the UI of the application [right here](https://codepen.io/borntofrappe/full/JmGGob/)
 
-Link to the working glitch [right here](https://various-umbrella.glitch.me/)
+<!-- Link to the working glitch [right here]() -->
 
 ## Preface
 
@@ -61,20 +61,6 @@ Here's a few things I was able to discern:
 _Obvious conclusion_: the application saves every URL as specified in the POST request. It stores its value alongside an integer value used as ID. It increments the integer for every unique URL. Clever, and less complex than anticipated.
 
 The challenge becomes then how to store the URL as requested through the POST request, which is where **MongoDB** and **Mongoose**, alongside **mLab** come into play.
-
-### HTML
-
-In order to actually retrieve the values detailed in the form element, it is first necessary to update the structure of the form element.
-
-- wrap the input and button elements in a form;
-
-- include a `type` of `submit` for the button, triggering the method and the path detailed in the form;
-
-- add a `method` and `action` attribute for the form element. The first describes the method of the request (get, post), the second the path toward which the form will forward the viewer.
-
-- specify a `name` attribute in the input element. This will allow to later retrieve its value through the body parser dependency.
-
-  As in: `req.body.name`.
 
 ### mLab
 
@@ -241,35 +227,35 @@ A document is created and saved in the database as follows:
 
 1. create the instance of the document, on the basis of the defined model.
 
-   ```JS
-   const url = new Url();
-   ```
+```JS
+const url = new Url();
+```
 
-   In between parens specify the fields and values as prescribed by the model's own structure.
+In between parens specify the fields and values as prescribed by the model's own structure.
 
-   ```JS
-   const url = new Url({
-     url: 'https://mlab.com',
-     short_url: 1
-   });
-   ```
+```JS
+const url = new Url({
+  url: 'https://mlab.com',
+  short_url: 1
+});
+```
 
 1. save the document through the `save()` method. This is applied on the document itself and, following the node convention, includes a callback function run whenever the saving functionality is completed.
 
-   ```JS
-   url.save((err, data) => {
-   if (err) throw err;
-     console.log(data);
-   });
-   ```
+```JS
+url.save((err, data) => {
+if (err) throw err;
+  console.log(data);
+});
+```
 
-   In this instance, `data` relates to an object detailing the document itself. If the function is successfull, that is.
+In this instance, `data` relates to an object detailing the document itself. If the function is successfull, that is.
 
-Ultimately, creating and saving a document is something that needs to happen when a URL is posted in the form element. That being said, the C in the CRUD set of operations needs to go through _only if_ a document with the same values is not already stored.
+Ultimately, creating and saving a document is something that needs occurring when posting the URL in the selected form element. That being said, the C in the CRUD set of operations needs to go through _only if_ a document with the same values is not already stored, which is where reading the database comes into play.
 
 #### Read
 
-As mentioned, reading the database might be useful to generate new documents only when necessary. That being said, the primary use case for the R in the CRUD set of operations concerns the `shorurl` path. Indeed, reading the database is essential when the shortened url is included in the prescribed path and the page needs to forward the user toward the specified, unshortened page.
+As mentioned, reading the database might be useful to generate new documents only when necessary. That being said, the primary use case for the R in the CRUD set of operations concerns the `shorurl` path, when the shortened url is included and the page needs to forward the user toward the specified, unshortened page.
 
 It is possible to find a document with a few methods, among which `findOne()`. Applied on the model (first letter conventionally uppercase), it accepts as argument an object detailing the property value pairs of the target document. A callback function can also be included, following the aforementioned node convention.
 
@@ -283,12 +269,67 @@ Url.findOne({
 })
 ```
 
-A _rather important note_: `findOne()` returns either one document or `null`, in case no object matches the detailed argument.
+The C and R operation relates to one facet of the application. Indeed, it is necessary to include the field's values on the basis of a request, both in a form element, following a POST request, and as a result of a specific URL.
 
-The C and R operation allow to save and read documents as relates the database. It is however necessary to customize the implmentation of the functions as to include the exact values required by the application. The value of the form and the value of the query string for instance.
+Simply put:
 
-- when reaching the `[project_url]/api/shorturl/new` path through a POST request, the value of the input element is used to create and save a document. If one document with the same `url` doesn't exist that is.
+- in `[project_url]/api/shorturl/new`, the app needs to render a JSON object based on the URL received as input. A shorturl value is here specified through an integer and the larger object saved as a document in the database.
 
-- when reaching the `[project_url]/api/shorturl/<value>` path, the request parameter is used to read in the database for an instance matching the value.
+- in `[project_url]/api/shorturl/<integer>`, the app needs to forward the viewer toward the selected path. Another core component of Node, the `dns` library, is suggested for this particular feat, which is prompted by reading a document in the database.
 
-With regards to this last feat, the [application by freecodecamp](https://thread-paper.glitch.me/) provides a suggestion in the **dns** core module. Additional notes on [this module](https://nodejs.org/api/dns.html) will follow, once the application is equipped to create and read documents on the basis of actual input.
+#### Update
+
+With the mentioned details, the application needed three of many things.
+
+1. a way to add a `short_url` value, incrementing this integer for every request;
+
+1. a way to validate the input, to create and save documents only for valid URL;
+
+1. a way to redirect the user toward the unshortened url (when including the shortened counterpart in the path of the application).
+
+These feats were achieved as follows:
+
+- the `estimatedDocumentCount()` method is used on the larger model to retrieve the length of the database, the number of documents it stores. The value retrieved from this method allows to include an ever updating `short_url` value;
+
+  ```JS
+  Url.estimatedDocumentCount((err, count) => {
+    console.log(count);
+  })
+  ```
+
+- the `dns` core module, already baked in node, provides the `lookup()` method to validate the input of the form element. This method accepts among many arguments the _hostname_ and a callback function. With a valid hostname, it returns the matching IP address, while an invalid input returns `undefined`.
+
+  The hostname, with a bit of experimentation, boils down to the string following the `https://` preface, and discounting any relative path. For instance, and for the following values:
+
+  | url                                             | hostname                |
+  | ----------------------------------------------- | ----------------------- |
+  | `https://medium.freecodecamp.org/`              | medium.freecodecamp.org |
+  | `https://translate.google.com/`                 | translate.google.com    |
+  | `https://translate.google.com/#fr/en/something` | translate.google.com    |
+
+  From the input text, it is therefore necessary to first retrieve the hostname value. Something a couple of regular expressions are fit to handle.
+
+  ```JS
+  const url = req.body.url;
+  const hostname = url
+    .replace(/http[s]?\:\/\//, '')
+    .replace(/\/(.+)?/, '');
+  ```
+
+  Once retrieved, the hostname can be included simply as the first argument of the `lookup()` method. In the callback function it is then possible to handle a possible return value.
+
+  ```JS
+  dns.lookup(hostname, (err, addresses) => {
+    console.log(addresses);
+  }
+  ```
+
+  The value returned by the function is either `undefined` or an IP address, depending on whether or not the hostname backs a valid URL. With a simple `if` `else` conditional statement it is possible to handle each case.
+
+Shopping list:
+
+- the `redirect()` method is finally the perfect solution to redirect the user toward the unshortened url. Applied on the response of the getter method, it specifies the directing URL in between parens.
+
+  ```JS
+  res.redirect(original_url)M
+  ```
