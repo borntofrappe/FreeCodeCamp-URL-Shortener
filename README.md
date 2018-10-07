@@ -4,7 +4,7 @@
 
 Link to the pen making up the UI of the application [right here](https://codepen.io/borntofrappe/full/JmGGob/)
 
-<!-- Link to the working glitch [right here]() -->
+Link to the working glitch [right here](https://various-umbrella.glitch.me/)
 
 ## Preface
 
