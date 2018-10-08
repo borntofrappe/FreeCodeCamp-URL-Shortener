@@ -2,13 +2,13 @@
 
 > Third of five projects required to earn the **API and Microservices** certification @freeCodeCamp.
 
-Link to the pen making up the UI of the application [right here](https://codepen.io/borntofrappe/full/JmGGob/)
+Link to the working pen for the UI of the application [right here](https://codepen.io/borntofrappe/full/JmGGob/).
 
-Link to the working glitch [right here](https://various-umbrella.glitch.me/).
+Link to the working glitch for the actual, functioning application [right here](https://various-umbrella.glitch.me/).
 
 ## Preface
 
-With this third project I am tasked to create a JavaScript app, similar to the one [referenceed by @freecodecamp](https://thread-paper.glitch.me/).
+With this third project I am tasked to create a JavaScript app, similar to the one [referenced by @freecodecamp](https://thread-paper.glitch.me/).
 
 This is a deceptively simple application which allows to _shorten_ the URL as posted in an input of type text. Simply put:
 
@@ -44,11 +44,9 @@ Say the application's own path is as follows: `https://thread-paper.glitch.me`:
 
 The UI behind the application can be found in the `Front-End` folder. The front-end development was the subject of a previous effort, and it is documented [right here](https://github.com/borntofrappe/Practice-Front-End-Web-Development/tree/master/Front-End%20URL%20Shortener).
 
-A simple JavaScript file is included to benefit from the express package, to render on the server the developed UI.
-
 ## Development
 
-Admittedly, the project baffled me at first, but after a couple of days, and bit of experimentation with the [working applicatin](https://thread-paper.glitch.me/) provided in the [assignment](https://learn.freecodecamp.org/apis-and-microservices/apis-and-microservices-projects/url-shortener-microservice/), I was able to figure out how the functionality is achieved.
+Admittedly, the project baffled me at first, but after a couple of days, and bit of experimentation with the [working application](https://thread-paper.glitch.me/) provided in the [assignment](https://learn.freecodecamp.org/apis-and-microservices/apis-and-microservices-projects/url-shortener-microservice/), I was able to figure out how the functionality is achieved.
 
 Here's a few things I was able to discern:
 
@@ -56,7 +54,7 @@ Here's a few things I was able to discern:
 
 - for the example URL, requesting a shortened version for `https://www.freecodecamp.com`, the response comprises an incredibly small integer. An almost ironically small integer;
 
-- the shortened version for a page summarising a random search on google returns an integer, let's call it `x`. The shortened version for yet another random search returns another integer, in `x+1`. Check `https://thread-paper.glitch.me/api/shorturl/1246` and `https://thread-paper.glitch.me/api/shorturl/1247` to certify this.
+- the shortened version for a page surmising a random search on google returns an integer, let's call it `x`. The shortened version for yet another random search returns another integer, in `x+1`. Check `https://thread-paper.glitch.me/api/shorturl/1246` and `https://thread-paper.glitch.me/api/shorturl/1247` to certify this.
 
 _Obvious conclusion_: the application saves every URL as specified in the POST request. It stores its value alongside an integer value used as ID. It increments the integer for every unique URL. Clever, and less complex than anticipated.
 
@@ -66,7 +64,7 @@ The challenge becomes then how to store the URL as requested through the POST re
 
 [mLab](https://mlab.com) is used to host the database storing the URLs for the application. Here's a few pointers to get up and running with the service:
 
-- choose to first _create a new database_, picking the most conventient options for the location and features.
+- choose to first _create a new database_, picking the most convenient options for the location and features.
 
 - once the database is set up, direct yourself toward the _user_ tab and opt to _add a database user_.
 
@@ -190,7 +188,7 @@ A practical instance, for the project at hand, might help clear past this jargon
   });
   ```
 
-  Additional options can be detailed include an object instead of a single value. To specify for instance a default value, or whether the field is required or again unique.
+  Additional options can be detailed include an object instead of a single value. To specify for instance a default value, or whether the field is required or again a default value.
 
   ```JS
   const urlSchema = new Schema({
@@ -200,12 +198,13 @@ A practical instance, for the project at hand, might help clear past this jargon
     },
     short_url: {
       type: Number,
-      required: true
+      required: true,
+      default: 0
     }
   });
   ```
 
-- create a model, out of the schema
+- create a model, based on the schema
 
   This is a constructor from which all documents will be created (and on which all documents will be based). The `model()` function, available through the mongoose library, allows to create such a constructor after the defined instance of the schema, detailing a string for the name of the model and the schema itself.
 
@@ -227,35 +226,35 @@ A document is created and saved in the database as follows:
 
 1. create the instance of the document, on the basis of the defined model.
 
-```JS
-const url = new Url();
-```
+   ```JS
+   const url = new Url();
+   ```
 
-In between parens specify the fields and values as prescribed by the model's own structure.
+   In between parens specify the fields and values as prescribed by the model's own structure.
 
-```JS
-const url = new Url({
-  url: 'https://mlab.com',
-  short_url: 1
-});
-```
+   ```JS
+   const url = new Url({
+     url: 'https://mlab.com',
+     short_url: 1
+   });
+   ```
 
 1. save the document through the `save()` method. This is applied on the document itself and, following the node convention, includes a callback function run whenever the saving functionality is completed.
 
-```JS
-url.save((err, data) => {
-if (err) throw err;
-  console.log(data);
-});
-```
+   ```JS
+   url.save((err, data) => {
+   if (err) throw err;
+     console.log(data);
+   });
+   ```
 
-In this instance, `data` relates to an object detailing the document itself. If the function is successfull, that is.
+   In this instance, `data` relates to an object detailing the document itself. If the function is successful, that is.
 
 Ultimately, creating and saving a document is something that needs occurring when posting the URL in the selected form element. That being said, the C in the CRUD set of operations needs to go through _only if_ a document with the same values is not already stored, which is where reading the database comes into play.
 
 #### Read
 
-As mentioned, reading the database might be useful to generate new documents only when necessary. That being said, the primary use case for the R in the CRUD set of operations concerns the `shorurl` path, when the shortened url is included and the page needs to forward the user toward the specified, unshortened page.
+As mentioned, reading the database might be useful to generate new documents only when necessary. That being said, the primary use case for the R in the CRUD set of operations concerns the `shorurl` path, when the shortened url is included and the page needs to forward the user toward the specified, un-shortened page.
 
 It is possible to find a document with a few methods, among which `findOne()`. Applied on the model (first letter conventionally uppercase), it accepts as argument an object detailing the property value pairs of the target document. A callback function can also be included, following the aforementioned node convention.
 
@@ -269,7 +268,7 @@ Url.findOne({
 })
 ```
 
-The C and R operation relates to one facet of the application. Indeed, it is necessary to include the field's values on the basis of a request, both in a form element, following a POST request, and as a result of a specific URL.
+The C and R operations relate to one facet of the application. Indeed, it is necessary to include the field's values on the basis of a request, both as a result of input received from a form element and as a result of a specific URL.
 
 Simply put:
 
@@ -325,8 +324,6 @@ These feats were achieved as follows:
   ```
 
   The value returned by the function is either `undefined` or an IP address, depending on whether or not the hostname backs a valid URL. With a simple `if` `else` conditional statement it is possible to handle each case.
-
-Shopping list:
 
 - the `redirect()` method is finally the perfect solution to redirect the user toward the unshortened url. Applied on the response of the getter method, it specifies the directing URL in between parens.
 
