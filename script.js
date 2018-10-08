@@ -63,7 +63,7 @@ app.post('/api/shorturl', (req, res) => {
    *    valid
    *    use the findOne() method to check if the database already contains a matching document
    *        not found
-   *        use the estimatedCount() method to assess the number of items in the database
+   *        use the estimatedDocumentCount() method to assess the number of items in the database
    *        create a new entry, using the length to create a unique short_url value
    *        save the entry
    *        display pertinent information
